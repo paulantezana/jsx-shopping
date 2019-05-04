@@ -1,7 +1,7 @@
 import { login } from '@/services/user';
 
 import { routerRedux } from 'dva/router';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 import { destroy, setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
 
@@ -16,10 +16,7 @@ export default {
             const response = yield call(login, payload);
             if (response.success) {
                 // Almacenando la autorizacion
-                setAuthority(
-                    response.data,
-                    payload.remember
-                )
+                setAuthority(response.data.token, 1, payload.remember);
                 reloadAuthorized(); // Recargando las authorizaciones
 
                 // Redireccionando la ruta

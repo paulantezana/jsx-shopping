@@ -58,7 +58,7 @@ class BasicLayout extends React.PureComponent {
       route: { routes, authority },
     } = this.props;
     dispatch({
-      type: 'user/fetchCurrent',
+      type: 'global/setup',
     });
     dispatch({
       type: 'setting/getSetting',
@@ -185,7 +185,7 @@ class BasicLayout extends React.PureComponent {
               {children}
             </Authorized>
           </Content>
-          <Footer />
+          {/* <Footer /> */}
         </Layout>
       </Layout>
     );

@@ -1,101 +1,58 @@
-import { queryNotices } from '@/services/user';
+import { settingLoad } from '@/services/setting';
+
+import { userUpdate } from '@/services/user';
+import { Modal, message } from 'antd';
+import { getAuthorityUser, getAuthorityRole } from '@/utils/authority';
 
 export default {
-  namespace: 'global',
+    namespace: 'global',
+    state: {
+        notices: [],
+        collapsed: false,
 
-  state: {
-    collapsed: false,
-    notices: [],
-  },
+        setting: {},
+        company: {},
+        user: {},
 
-  effects: {
-    *fetchNotices(_, { call, put, select }) {
-      const data = yield call(queryNotices);
-      yield put({
-        type: 'saveNotices',
-        payload: data,
-      });
-      const unreadCount = yield select(
-        state => state.global.notices.filter(item => !item.read).length
-      );
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: data.length,
-          unreadCount,
+        success: false,
+    },
+
+    effects: {
+        *setup({ payload }, { call, put, all }) {
+            const response = yield call(settingLoad);
+            if (response.success) {
+                yield put({
+                    type: 'querySuccess',
+                    payload: {
+                        user: response.data.user,
+                        company: response.data.company,
+                        setting: response.data.setting,
+                    },
+                });
+            } else {
+                Modal.error({ title: 'Error al actualizar el perfil', content: response.message });
+            }
+        }, 
+    },
+
+    reducers: {
+        changeLayoutCollapsed(state, { payload }) {
+            return { ...state, collapsed: payload };
         },
-      });
-    },
-    *clearNotices({ payload }, { put, select }) {
-      yield put({
-        type: 'saveClearedNotices',
-        payload,
-      });
-      const count = yield select(state => state.global.notices.length);
-      const unreadCount = yield select(
-        state => state.global.notices.filter(item => !item.read).length
-      );
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: count,
-          unreadCount,
+        // updateProfileSuccess(state, action) {
+        //     return { ...state, user: Object.assign({}, state.user, action.payload) };
+        // },
+        // updateSettingSuccess(state, action) {
+        //     return { ...state, setting: Object.assign({}, state.setting, action.payload) };
+        // },
+        // updateProgramSuccess(state, action) {
+        //     return { ...state, program: Object.assign({}, state.program, action.payload) };
+        // },
+        querySuccess(state, { payload }) {
+            return { ...state, ...payload };
         },
-      });
+        // setSubsidiary(state, { payload }) {
+        //     return { ...state, subsidiary: {...state.subsidiary, id: payload.id } };
+        // },
     },
-    *changeNoticeReadState({ payload }, { put, select }) {
-      const notices = yield select(state =>
-        state.global.notices.map(item => {
-          const notice = { ...item };
-          if (notice.id === payload) {
-            notice.read = true;
-          }
-          return notice;
-        })
-      );
-      yield put({
-        type: 'saveNotices',
-        payload: notices,
-      });
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: {
-          totalCount: notices.length,
-          unreadCount: notices.filter(item => !item.read).length,
-        },
-      });
-    },
-  },
-
-  reducers: {
-    changeLayoutCollapsed(state, { payload }) {
-      return {
-        ...state,
-        collapsed: payload,
-      };
-    },
-    saveNotices(state, { payload }) {
-      return {
-        ...state,
-        notices: payload,
-      };
-    },
-    saveClearedNotices(state, { payload }) {
-      return {
-        ...state,
-        notices: state.notices.filter(item => item.type !== payload),
-      };
-    },
-  },
-
-  subscriptions: {
-    setup({ history }) {
-      // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      return history.listen(({ pathname, search }) => {
-        if (typeof window.ga !== 'undefined') {
-          window.ga('send', 'pageview', pathname + search);
-        }
-      });
-    },
-  },
 };

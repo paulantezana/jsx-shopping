@@ -1,5 +1,5 @@
 // ref: https://umijs.org/config/
-import { primaryColor } from '../src/defaultSettings';
+import defaultSettings from '../src/defaultSettings';
 import pageRoutes from './router.config';
 
 export default {
@@ -54,7 +54,10 @@ export default {
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
   theme: {
-    'primary-color': primaryColor,
+    'primary-color': defaultSettings.primaryColor,
+
+    'layout-header-height': '50px',
+    'menu-collapsed-width': '60px',
   },
   externals: {
     '@antv/data-set': 'DataSet',

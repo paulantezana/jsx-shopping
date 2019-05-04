@@ -8,6 +8,8 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import router from 'umi/router';
+import { service } from '@/setting';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -67,6 +69,7 @@ export default class GlobalHeaderRight extends PureComponent {
     const {
       currentUser,
       fetchingNotices,
+      defaultAvatar,
       onNoticeVisibleChange,
       onMenuClick,
       onNoticeClear,
@@ -74,17 +77,9 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
+        <Menu.Item key="settings">
           <Icon type="user" />
-          <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
-        <Menu.Item key="userinfo">
-          <Icon type="setting" />
-          <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
-        </Menu.Item>
-        <Menu.Item key="triggerError">
-          <Icon type="close-circle" />
-          <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
+          <FormattedMessage id="menu.account.settings" defaultMessage="settings" />
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
@@ -101,7 +96,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        <HeaderSearch
+        {/* <HeaderSearch
           className={`${styles.action} ${styles.search}`}
           placeholder={formatMessage({ id: 'component.globalHeader.search' })}
           dataSource={[
@@ -115,18 +110,15 @@ export default class GlobalHeaderRight extends PureComponent {
           onPressEnter={value => {
             console.log('enter', value); // eslint-disable-line
           }}
-        />
+        /> */}
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
-          <a
-            target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
-            rel="noopener noreferrer"
-            className={styles.action}
-          >
-            <Icon type="question-circle-o" />
-          </a>
+          <span className={styles.action}>
+            <Icon type="question-circle-o" onClick={()=>{
+                router.push('/settings/info');
+            }}/>
+          </span>
         </Tooltip>
-        <NoticeIcon
+        {/* <NoticeIcon
           className={styles.action}
           count={currentUser.unreadCount}
           onItemClick={(item, tabProps) => {
@@ -166,17 +158,21 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyText={formatMessage({ id: 'component.globalHeader.event.empty' })}
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
-        </NoticeIcon>
-        {currentUser.name ? (
+        </NoticeIcon> */}
+        {currentUser.user_name ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
+              {/* <span className={styles.name}>{currentUser.user_name}</span> */}
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={
+                  currentUser.avatar == ''
+                    ? `${service.path}/${defaultAvatar}`
+                    : `${service.path}/${currentUser.avatar}`
+                }
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
             </span>
           </HeaderDropdown>
         ) : (

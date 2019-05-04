@@ -5,6 +5,7 @@ import Link from 'umi/link';
 import styles from './index.less';
 import PageLoading from '../PageLoading';
 import { getDefaultCollapsedSubMenus } from './SiderMenuUtils';
+import { service, app } from '@/setting';
 
 const BaseMenu = React.lazy(() => import('./BaseMenu'));
 const { Sider } = Layout;
@@ -51,7 +52,7 @@ export default class SiderMenu extends PureComponent {
     const defaultProps = collapsed ? {} : { openKeys };
 
     const siderClassName = classNames(styles.sider, {
-      [styles.fixSiderbar]: fixSiderbar,
+      [styles.fixSiderBar]: fixSiderbar,
       [styles.light]: theme === 'light',
     });
     return (
@@ -59,16 +60,17 @@ export default class SiderMenu extends PureComponent {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        breakpoint="lg"
+        breakpoint="xxl"
         onCollapse={onCollapse}
-        width={256}
+        width={220}
+        collapsedWidth={60}
         theme={theme}
         className={siderClassName}
       >
         <div className={styles.logo} id="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>Ant Design Pro</h1>
+            <h1>{app.name}</h1>
           </Link>
         </div>
         <Suspense fallback={<PageLoading />}>

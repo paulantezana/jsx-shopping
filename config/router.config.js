@@ -39,19 +39,25 @@ export default [
         Routes: ['src/pages/Authorized'],
         authority: [1],
         routes: [
-          { path: '/', redirect: '/welcome' },
-          // dashboard
-          {
-            path: '/welcome',
-            name: 'welcome',
-            icon: 'smile',
-            component: './Welcome',
-          },
-          {
-            path: 'https://github.com/umijs/umi-blocks/tree/master/ant-design-pro',
-            name: 'more-blocks',
-            icon: 'block',
-          },
+            { path: '/', redirect: '/welcome' },
+            // dashboard
+            {
+                path: '/welcome',
+                name: 'welcome',
+                icon: 'smile',
+                component: './Welcome',
+            },
+            {
+                path: 'https://github.com/umijs/umi-blocks/tree/master/ant-design-pro',
+                name: 'more-blocks',
+                icon: 'block',
+            },
+            {
+                path: '/account',
+                name: 'account',
+                hideInMenu: true,
+                component: './Account',
+            },
         ],
-      },
+    },
 ];

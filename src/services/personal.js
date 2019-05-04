@@ -1,38 +1,6 @@
 import request from '@/utils/request';
 
-const RUTE_API = '/user';
-
-// User Login
-export async function login(body) {
-    return request(`/public${RUTE_API}/login`, {
-        method: 'POST',
-        body,
-    });
-}
-
-// User forgout search email
-export async function userForgotSearch(body) {
-    return request(`/public${RUTE_API}/forgot/search`, {
-        method: 'POST',
-        body,
-    });
-}
-
-// User forgout validate key change password
-export async function userForgotValidate(body) {
-    return request(`/public${RUTE_API}/forgot/validate`, {
-        method: 'POST',
-        body,
-    });
-}
-
-// User forgout change password
-export async function userForgotChange(body) {
-    return request(`/public${RUTE_API}/forgot/change`, {
-        method: 'POST',
-        body,
-    });
-}
+const RUTE_API = '/personal';
 
 // Update user
 export async function userResetPassword(body) {
@@ -59,8 +27,8 @@ export async function userUploadAvatar(body) {
 }
 
 // Get all users
-export async function userAll(body) {
-    return request(`${RUTE_API}/all`, {
+export async function userPaginate(body) {
+    return request(`${RUTE_API}/paginate`, {
         method: 'POST',
         body,
     });
