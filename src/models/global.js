@@ -1,6 +1,6 @@
 import { settingLoad } from '@/services/setting';
 
-import { userUpdate } from '@/services/user';
+import { companyUpdate } from '@/services/company';
 import { Modal, message } from 'antd';
 import { getAuthorityUser, getAuthorityRole } from '@/utils/authority';
 
@@ -33,6 +33,21 @@ export default {
                 Modal.error({ title: 'Error al actualizar el perfil', content: response.message });
             }
         }, 
+        *updateCompany({ payload }, { call, put, all }) {
+            const response = yield call(companyUpdate,{...payload});
+            if (response.success) {
+                // yield put({
+                //     type: 'querySuccess',
+                //     payload: {
+                //         user: response.data.user,
+                //         company: response.data.company,
+                //         setting: response.data.setting,
+                //     },
+                // });
+            } else {
+                Modal.error({ title: 'Error al actualizar el perfil', content: response.message });
+            }
+        }
     },
 
     reducers: {

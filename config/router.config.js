@@ -12,26 +12,26 @@ export default [
         ],
     },
     // exception
-    // {
-    //     path: '/exception',
-    //     component: '../layouts/UserLayout',
-    //     routes: [
-    //         // exception
-    //         {
-    //             path: '/exception/403',
-    //             component: './Exception/403',
-    //         },
-    //         {
-    //             path: '/exception/404',
-    //             component: './Exception/404',
-    //         },
-    //         {
-    //             path: '/exception/500',
-    //             component: './Exception/500',
-    //         },
-    //         { component: '404' },
-    //     ],
-    // },
+    {
+        path: '/exception',
+        component: '../layouts/UserLayout',
+        routes: [
+            // exception
+            {
+                path: '/exception/403',
+                component: './Exception/403',
+            },
+            {
+                path: '/exception/404',
+                component: './Exception/404',
+            },
+            {
+                path: '/exception/500',
+                component: './Exception/500',
+            },
+            { component: '404' },
+        ],
+    },
     // app
     {
         path: '/',
@@ -40,23 +40,47 @@ export default [
         authority: [1],
         routes: [
             { path: '/', redirect: '/welcome' },
-            // dashboard
-            {
-                path: '/welcome',
-                name: 'welcome',
-                icon: 'smile',
-                component: './Welcome',
-            },
-            {
-                path: 'https://github.com/umijs/umi-blocks/tree/master/ant-design-pro',
-                name: 'more-blocks',
-                icon: 'block',
-            },
             {
                 path: '/account',
                 name: 'account',
                 hideInMenu: true,
                 component: './Account',
+            },
+            {
+                path: '/settings',
+                name: 'setting',
+                icon: 'setting',
+                // authority: [1, 2],
+                routes: [
+                    {
+                        path: '/settings/company',
+                        name: 'company',
+                        component: './Setting/Company',
+                    },
+                    {
+                        path: '/settings/personal',
+                        name: 'personal',
+                        component: './Setting/Personal',
+                    },
+                    {
+                        path: '/settings/back',
+                        name: 'back',
+                        component: './Setting/Back',
+                    },
+                    {
+                        path: '/settings/info',
+                        name: 'info',
+                        component: './Setting/Info',
+                    },
+                    // {
+                    //     path: '/settings/api',
+                    //     name: 'api',
+                    //     component: './Setting/Api',
+                    // },
+                ],
+            },
+            {
+                component: '404',
             },
         ],
     },

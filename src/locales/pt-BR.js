@@ -2,6 +2,7 @@ import globalHeader from './pt-BR/globalHeader';
 import menu from './pt-BR/menu';
 import settings from './pt-BR/settings';
 import login from './es-ES/login';
+import exception from './pt-BR/exception';
 
 export default {
   'navBar.lang': 'Idiomas',
@@ -13,4 +14,5 @@ export default {
   ...menu,
   ...settings,
   ...login,
+  ...exception,
 };

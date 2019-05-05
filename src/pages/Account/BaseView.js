@@ -17,7 +17,7 @@ const ProfileForm = Form.create()(
             this.props.form.validateFields((err, values) => {
                 if (!err) {
                     dispatch({
-                        type: 'personal/updateProfile',
+                        type: 'personal/update',
                         payload: { ...user, ...values },
                     });
                 }

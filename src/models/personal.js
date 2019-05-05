@@ -142,7 +142,7 @@ export default {
         showModal(state, { payload }) {
             return { ...state, ...payload, modalVisible: true };
         },
-        resetUser(state, action) {
+        resetPersonal(state, action) {
             return { ...state, currentItem: {}, modalVisible: false, modalType: 'create' };
         },
         resetForgot(state, action) {
