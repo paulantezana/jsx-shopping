@@ -1,9 +1,27 @@
 export default {
-  'menu.welcome': 'Welcome',
-  'menu.more-blocks': 'More Blocks',
+  'menu.home': 'Welcome',
+  'menu.account': 'Cuenta',
 
   'menu.account.center': 'Central da Conta',
   'menu.account.settings': 'Configurar Conta',
   'menu.account.trigger': 'Disparar Erro',
-  'menu.account.logout': 'Sair',
+  'menu.account.logout': 'Salir',
+
+  'menu.operations': 'Operaciones',
+  'menu.operations.sale': 'Ventas',
+  'menu.operations.purchase': 'Compras',
+  'menu.operations.quotation': 'Contización',
+  'menu.operations.order': 'Pedido',
+  'menu.operations.articles': 'Artículos',
+  'menu.operations.customers': 'Clientes',
+  'menu.operations.providers': 'Proveedores',
+
+  'menu.setting.category': 'Categoria',
+  'menu.setting.brand': 'Marca',
+  'menu.setting.unitmeasure': 'Unidad de medida',
+  'menu.setting': 'Configuración',
+  'menu.setting.company': 'Empresa',
+  'menu.setting.personal': 'Personal',
+  'menu.setting.back': 'Recuperación',
+  'menu.setting.info': 'Info',
 };

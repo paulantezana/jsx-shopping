@@ -1,0 +1,31 @@
+@import '~antd/lib/style/themes/default.less';
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.tableList{
+    &Form,
+    &Operators{
+        & > * {
+            margin-right: 16px;
+            margin-bottom: 16px;
+        }
+    }
+
+    @media screen and (min-width: @screen-md) {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+    }
+}
+
+// .tableListForm{
+//     margin-bottom: 16px;
+// }
+
+// .tableListOperator {
+//     
+// }

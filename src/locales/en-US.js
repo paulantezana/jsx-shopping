@@ -3,6 +3,7 @@ import menu from './en-US/menu';
 import settings from './en-US/settings';
 import login from './es-ES/login';
 import exception from './en-US/exception';
+import app from './en-US/app';
 
 export default {
   'navBar.lang': 'Languages',
@@ -15,4 +16,5 @@ export default {
   ...settings,
   ...login,
   ...exception,
+  ...app,
 };

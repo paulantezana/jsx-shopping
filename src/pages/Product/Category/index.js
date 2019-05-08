@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {
     Modal,
     Tooltip,
@@ -10,8 +11,8 @@ import {
     Button,
     Card,
     Avatar,
-    Switch,
     Divider,
+    Switch,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import styles from './index.less';
@@ -19,7 +20,6 @@ import styles from './index.less';
 import { service } from '@/setting';
 
 import FormModal from './FormModal';
-import FormUser from './FormUser';
 
 const Search = Input.Search;
 
@@ -42,7 +42,7 @@ class DataList extends Component {
         };
 
         dispatch({
-            type: 'personal/paginate',
+            type: 'category/paginate',
             payload: params,
         });
     };
@@ -50,8 +50,14 @@ class DataList extends Component {
     onShowModal = (modalType, currentItem = {}) => {
         const { dispatch } = this.props;
         dispatch({
-            type: 'personal/showModal',
+            type: 'category/showModal',
             payload: { currentItem, modalType },
+        });
+        dispatch({
+            type: 'category/treeSelect',
+            payload: {
+                parent: true,
+            },
         });
     };
 
@@ -112,14 +118,14 @@ class DataList extends Component {
     };
 
     render() {
-        const { personal, company, loading } = this.props;
-        const { data } = personal;
+        const { category, company, loading } = this.props;
+        const { data } = category;
         const { selectedRows } = this.state;
 
         const onDelete = param => {
             const { dispatch } = this.props;
             dispatch({
-                type: 'personal/delete',
+                type: 'category/delete',
                 payload: param,
             });
         };
@@ -127,59 +133,63 @@ class DataList extends Component {
         const onUpdate = param => {
             const { dispatch } = this.props;
             dispatch({
-                type: `personal/update`,
+                type: 'category/update',
                 payload: param,
             });
         };
 
         const columns = [
             {
-                title: 'Foto',
-                key: 'avatar',
-                width: '57px',
-                render: (a, record) =>
-                    a.avatar != '' ? (
-                        <Avatar src={`${service.path}/${a.avatar}`} />
-                    ) : (
-                        <Avatar src={`${service.path}/${company.logo}`} />
-                    ),
+                title: 'Categoria',
+                dataIndex: 'name',
+                key: 'name',
             },
             {
-                title: 'Apellidos',
-                dataIndex: 'last_name',
-                key: 'last_name',
+                title: 'Titulo Seo',
+                dataIndex: 'title_category_seo',
+                key: 'title_category_seo',
             },
             {
-                title: 'Nombres',
-                dataIndex: 'first_name',
-                key: 'first_name',
+                title: 'Categoria Seo',
+                dataIndex: 'url_category_seo',
+                key: 'url_category_seo',
             },
             {
-                title: 'Email',
-                dataIndex: 'email',
-                key: 'email',
+                title: 'Descripción Seo',
+                dataIndex: 'description_seo',
+                key: 'description_seo',
+            },
+            {
+                title: 'Mostrar en web',
+                key: 'show_web',
+                render: (a, record) => {
+                    return (
+                        <Switch
+                            size="small"
+                            checked={record.show_web}
+                            onClick={value =>
+                                onUpdate({
+                                    id: record.id,
+                                    show_web: value,
+                                })
+                            }
+                        />
+                    );
+                },
             },
             {
                 title: 'Accion',
                 key: 'accion',
-                width: '150px',
+                width: '100px',
                 render: (a, record) => {
                     return (
                         <div className={styles.actions}>
-                            <Tooltip title="Estado">
-                                <Switch
-                                    size="small"
-                                    checked={a.state}
-                                    onChange={checked => onUpdate({ id: a.id, state: checked })}
-                                />
-                            </Tooltip>
-                            <Divider type="vertical" />
                             <Tooltip title="Editar">
                                 <Button
                                     icon="edit"
                                     shape="circle"
                                     type="primary"
-                                    onClick={() => this.onShowModal('update', a)}
+                                    onClick={() => this.onShowModal('update', record)}
                                 />
                             </Tooltip>
                             <Divider type="vertical" />
@@ -191,12 +201,10 @@ class DataList extends Component {
                                     onClick={() => {
                                         Modal.confirm({
                                             title: '¿Estás seguro de eliminar este registro?',
-                                            content: a.user_name,
-                                            okText: 'SI',
+                                            content: record.name,
                                             okType: 'danger',
-                                            cancelText: 'NO',
                                             onOk() {
-                                                onDelete({ id: a.id });
+                                                onDelete({ id: record.id });
                                             },
                                         });
                                     }}
@@ -215,71 +223,65 @@ class DataList extends Component {
         );
 
         return (
-            <Card bordered={false}>
-                <div className={styles.tableList}>
-                    <div className={styles.tableListForm}>
-                        <Search
-                            placeholder="Buscar personal"
-                            value={this.state.search}
-                            onChange={this.handleSearch}
-                        />
+            <PageHeaderWrapper title="Categoria">
+                <Card bordered={false}>
+                    <div className={styles.tableList}>
+                        <div className={styles.tableListForm}>
+                            <Search
+                                placeholder="Buscar categoria"
+                                value={this.state.search}
+                                onChange={this.handleSearch}
+                            />
+                        </div>
+                        <div className={styles.tableListOperators}>
+                            <Button.Group>
+                                <Button
+                                    loading={loading}
+                                    icon="plus"
+                                    type="primary"
+                                    onClick={() => this.onShowModal('create')}
+                                >
+                                    Nuevo
+                                </Button>
+                                <Button
+                                    icon="reload"
+                                    loading={loading}
+                                    onClick={() => this.onQueryPaginate()}
+                                >
+                                    Refrescar
+                                </Button>
+                            </Button.Group>
+                            {selectedRows.length > 0 && (
+                                <span>
+                                    <Dropdown overlay={menu}>
+                                        <Button>
+                                            Mas operaciones <Icon type="down" />
+                                        </Button>
+                                    </Dropdown>
+                                </span>
+                            )}
+                        </div>
                     </div>
-                    <div className={styles.tableListOperators}>
-                        <Button.Group>
-                            <Button
-                                loading={loading}
-                                icon="plus"
-                                type="primary"
-                                onClick={() => this.onShowModal('create')}
-                            >
-                                Nuevo (F3)
-                            </Button>
-                            <Button
-                                icon="reload"
-                                loading={loading}
-                                onClick={() => this.onQueryPaginate()}
-                            >
-                                Refrescar
-                            </Button>
-                        </Button.Group>
-                        <Button.Group>
-                            <Button icon="lock" />
-                        </Button.Group>
-                        {selectedRows.length > 0 && (
-                            <span>
-                                <Dropdown overlay={menu}>
-                                    <Button>
-                                        Mas operaciones <Icon type="down" />
-                                    </Button>
-                                </Dropdown>
-                            </span>
-                        )}
-                    </div>
-                </div>
-                <StandardTable
-                    selectedRows={selectedRows}
-                    loading={loading}
-                    data={data}
-                    columns={columns}
-                    rowKey={record => record.id}
-                    onSelectRow={this.handleSelectRows}
-                    onChange={this.handleStandardTableChange}
-                />
-                <FormModal />
-                <FormUser />
-            </Card>
+                    <StandardTable
+                        selectedRows={selectedRows}
+                        loading={loading}
+                        data={data}
+                        columns={columns}
+                        rowKey={record => record.id}
+                        onSelectRow={this.handleSelectRows}
+                        onChange={this.handleStandardTableChange}
+                    />
+                    <FormModal />
+                </Card>
+            </PageHeaderWrapper>
         );
     }
 }
 
-const mapStateToProps = ({ personal, global, loading }) => {
-    return {
-        personal,
-        currentUser: global.user,
-        company: global.company,
-        roles: global.roles,
-        loading: loading.effects['personal/paginate'],
-    };
-};
+const mapStateToProps = ({ category, global, loading }) => ({
+    category,
+    company: global.company,
+    loading: loading.effects['category/paginate'],
+});
 
 export default connect(mapStateToProps)(DataList);
