@@ -3,13 +3,10 @@ import { Modal, Form, Input, TreeSelect, Tabs, Icon } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 
-
 import Article from './Article';
 import Info from './Info';
 import Picture from './Picture';
 import Provider from './Provider';
-
-
 
 const formItemLayout = {
     labelCol: {
@@ -54,7 +51,6 @@ const AddForm = Form.create()(
         };
 
         // onChangeTab
-
         render() {
             const { form, loading, product, category } = this.props;
             const { getFieldDecorator } = form;
